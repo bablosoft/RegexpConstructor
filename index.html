@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Regular expression constructor</title>
+  <meta charset="UTF-8">
+</head>
+<body style="display:none">
+  <!-- ========= -->
+  <!--   HTML    -->
+  <!-- ========= -->
+
+
+  <div id="container">
+
+  </div>
+
+  <footer class="footer">
+    <div class="container-fluid">
+      <div class="text-right" style="font-size:70%;width:100%">
+        <div style="float:left">
+          See video tutorial on <a href="https://youtu.be/UkNvH-QNyxc" target="_blank">Youtube</a>
+        </div>
+        <div style="float :right">
+          <span class="tr">This tool is part of</span> 
+          <a href="https://bablosoft.com/shop/BrowserAutomationStudio" target="_blank"  >BrowserAutomationStudio</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <div class="modal fade" id="SelectRegexpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title tr" id="myModalLabel">You have selected part of text, please select what forms can it take?</h4>
+        </div>
+        <div class="modal-body container-fluid">
+            <div class="radio">
+              <label><input type="radio" name="type" checked="checked" value="exact"><span class="tr">Exact text</span>:</label>
+              <div class="radiodata">
+                <input type="text" class="form-control" id="exacttextid" />
+              </div>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="type"  value="any"><span class="tr">Any symbol</span> <span class="gray12">( . )</span></label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="type" value="ignore"><span class="tr">Ignore that text</span></label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="type" value="digit"><span class="tr">Digit</span> <span class="gray12">( \d )</span></label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="type" value="space"><span class="tr">Whitespace</span> <span class="gray12">( \s )</span></label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="type" value="letters"><span class="tr">Letter</span> <span class="gray12">( \w )</span></label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="type" value="oneof"><span class="tr">One of many options</span></label>
+              <div class="radiodata" style="display:none">
+                <input type="text" class="form-control regexpoption"/>
+                <input type="text" class="form-control regexpoption"/>
+                <input type="text" class="form-control regexpoption"/>
+                <span id="additionregexpoption">
+
+                </span>
+                <a href="#" id="regexpoptionmore"><span class="tr">More</span></a>
+              </div>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="type" value="set"><span class="tr">Any letters from set</span> <span class="gray12">( [] )</span></label>
+              <div class="radiodata" style="display:none">
+                <input type="text" class="form-control" id="regexpset" />
+                <span class="gray"><span class="tr">This field can contain character set, 0123456789 - means letters. Also ranges are available, 0-9 means any digit, a-zA-Z any english letter.</span></span>
+              </div>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="type"  value="negativeset"><span class="tr">Any letters which set doesn't contain</span> <span class="gray12">( [^] )</span></label>
+              <div class="radiodata" style="display:none">
+                <input type="text" class="form-control" id="regexpsetnegative" />
+                <span class="gray"><span class="tr">This field can contain character set, 0123456789 - means letters. Also ranges are available, 0-9 means any digit, a-zA-Z any english letter.</span></span>
+              </div>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="type"  value="custom"><span class="tr">Custom regexp</span></label>
+              <div class="radiodata" style="display:none">
+                <input type="text" class="form-control" id="customregexp" />
+              </div>
+            </div>
+        </div>
+        <hr style="margin-top:0px;margin-bottom:0px"/>
+        <div class="modal-body container-fluid">
+          <h4 class="tr"><span class="tr">How many times this text can occur</h4>
+          <div class="radio">
+              <label><input type="radio" name="number" value="onetime" checked="checked"><span class="tr">One time</span> <span class="gray12">( 1 )</span></label>
+          </div>
+          <div class="radio">
+              <label><input type="radio" name="number" value="oneorzero"><span class="tr">One or zero time</span> <span class="gray12">( 0 - 1 )</span></label>
+          </div>
+          <div class="radio">
+              <label><input type="radio" name="number" value="zeroormore"><span class="tr">Zero or more times</span> <span class="gray12">( 0 - &#8734; )</span></label>
+          </div>
+          <div class="radio">
+              <label><input type="radio" name="number" value="oneormore"><span class="tr">One or more times</span> <span class="gray12">( 1 - &#8734; )</span></label>
+          </div>
+          <div class="radio">
+              <label><input type="radio" name="number" value="rangetimes"><span class="tr">From n to m times</span> <span class="gray12">( n - m )</span> </label>
+              <div class="radiodatanumber" style="display:none">
+                <div class="form-group">
+                  <div class="tr">From</div>
+                  <input type="number" class="form-control" id="frommatches" value="10" min="0" /> 
+                </div>
+                <div class="form-group">
+                  <div class="tr">To</div>
+                  <input type="number" class="form-control" id="tomatches" value="10" min="1" /> 
+                </div>
+              </div>
+              
+          </div>
+
+          <label for="nongready" style="display:none" id="nongreadylabel"><input type="checkbox" id="nongready" > <span class="tr">Match as few times as possible</span></input></label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" id="cancel-regexp-constructor"><span class="tr">Close</span></button>
+          <button type="button" class="btn btn-primary" id="accept-regexp-constructor"><span class="tr">Accept</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= -->
+  <!-- TEMPLATES -->
+  <!-- ========= -->
+
+  <script type="text/template" id="main">
+    <div class="firstpage" id="containerinner"><a href="#!/input" class="tr" style="font-family: 'Joti One', cursive;">I want to build regular expression!</a></div>
+  </script>
+
+  <script type="text/template" id="input">
+    <div class="secondpage" id="containerinner">
+      <label for="regexparea" class="tr">Input result together with side text.</label>
+      <div class="gray12 tr" style="width:100%;text-align:center">Use only text needed to match text. For example, if you want to capture links on page, you can use &lt;a href="http://google.com"</div>
+      <textarea type="email" class="form-control" id="regexparea"><%= _.escape(model["inputtext"]) %></textarea>
+      <div class="buttonpanel"><a href="#" class="tr btn btn-success disabled" id="regexpareanext">Next</a></div>
+    </div>
+  </script>
+
+  <script type="text/template" id="regexptable">
+    <%
+    var start = _GobalModel.get("selectionresultstart")
+    var end = _GobalModel.get("selectionresultend")
+
+    if(start > end)
+    {
+      start = _GobalModel.get("selectionresultend")
+      end = _GobalModel.get("selectionresultstart")
+    }
+    %>
+
+    <%= 
+    
+      _.reduce(chars, function(a, c, index){
+
+
+      if(start == index && isconstruct)
+      {
+        a += "<div class='r'>(</div>"
+      }
+
+      a += "<div class='e'>" 
+
+      if(/\s/g.test(_.escape(c)))
+        a += "&nbsp;"
+      else
+        a += _.escape(c)
+
+      a += "</div>";  
+
+      if(end == index && isconstruct)
+      {
+          a += "<div class='r'>)</div>"
+      }
+      
+      return a;
+    }, "") %>
+  </script>
+
+  <script type="text/template" id="resultselect">
+    <div class="thirdpage" id="containerinner">
+      <div class="tr labelregexp">Now select result.</div>
+      <div class="regexptablediv">
+        <%= _.template($('#regexptable').html())({chars:model["inputtext"].split(""), isconstruct: false}) %>
+      </div>
+      <div class="buttonpanel">
+        <a href="#!/regexpconstruct" class="tr btn btn-success disabled" id="toregexpconstruct">Next</a>
+        <a href="#!/input" class="tr btn btn-info" id="toregexpinput">Previous</a>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/template" id="regexpconstruct">
+    <div class="fourthpage" id="containerinner">
+      <div class="tr labelregexp">Mark parts of text and convert them to regular expression.</div>
+      <div class="regexptablediv">
+        <%= _.template($('#regexptable').html())({chars:model["inputtext"].split(""), isconstruct: true}) %>
+      </div>
+      <div class="buttonpanel">
+        <a href="#!/regexptest" class="tr btn btn-success disabled" id="toregexptest">Next</a>
+        <a href="#!/input" class="tr btn btn-info" id="toregexpinput">Previous</a>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/template" id="regexptest">
+    <div class="fifthpage" id="containerinner">
+      <div class="container-fluid">
+        <div class="form-group">
+          <div class="tr text-center">Your regular expression is:</div>
+          <div class="input-group">
+            <input type="text" class="form-control" id="regularexpressionresult" /> 
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" data-clipboard-target="#regularexpressionresult"><span class="tr">Copy</span></button>
+            </span>
+          </div>
+        </div>
+        <div>
+          <textarea class="form-control" id="inputbigtext" placeholder="Input text to test regular expression here"></textarea>
+        </div>
+
+        <div>
+          <textarea class="form-control" id="inputbigresults" placeholder="This area will contain result"></textarea>
+        </div>
+      </div>
+
+      <div class="buttonpanel">
+        <a href="#!/regexpconstruct" class="tr btn btn-info">Previous</a>
+      </div>
+    </div>
+  </script>
+
+
+
+  <!-- ========= -->
+  <!-- Libraries -->
+  <!-- ========= -->
+  <script src="jquery-2.1.3.min.js" type="text/javascript"></script>
+  <script src="lodash.js" type="text/javascript"></script>
+  <script src="backbone.js" type="text/javascript"></script>
+  <script src="bootstrap.min.js"></script>
+  <script src="translate.js"></script>
+  <script src="clipboard.js"></script>
+  
+  
+
+  <!-- ========= -->
+  <!--   Styles  -->
+  <!-- ========= -->
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+
+
+  <!-- =============== -->
+  <!-- Javascript code -->
+  <!-- =============== -->
+  <script type="text/javascript">
+
+    var GobalModel = Backbone.Model.extend({
+        defaults: {
+            state: "main",
+            inputtext: "",
+            selectionresultstart: -1,
+            selectionresultend: -1,
+            selectionresulttakesplace: false,
+            constr: []
+
+        }
+    });
+
+    var LocalModel = Backbone.Model.extend({
+        defaults: {
+            selectionresultstart: -1,
+            selectionresultend: -1,
+            overindex: -1,
+            constr: [],
+        }
+    });
+
+
+    var MainView = Backbone.View.extend({
+      el: '#container',
+
+      events: {
+        "change #regexparea": "validateregexparea",
+        "keyup #regexparea": "validateregexparea",
+        "paste #regexparea": "validateregexparea",
+        "click #regexpareanext": "saveinputtext",
+        "mouseover .e": "mouseovertable",
+        "mousedown .e": "tableclick",
+        "mouseout .regexptablediv": "mouseouttable",
+        "click #toregexpconstruct":"saveselection",
+        "change #inputbigtext": "updateregularexpressionresult",
+        "keyup #inputbigtext": "updateregularexpressionresult",
+        "paste #inputbigtext": "updateregularexpressionresult",
+        "change #regularexpressionresult": "updateregularexpressionresult",
+        "keyup #regularexpressionresult": "updateregularexpressionresult",
+        "paste #regularexpressionresult": "updateregularexpressionresult",
+        "click .revert-original-text": "revertoriginaltext"
+        
+     },
+
+      updateregularexpressionresult: function()
+      {
+          if($("#regularexpressionresult").val() == 0)
+            return
+
+          if($("#inputbigtext").val() == 0)
+            return
+
+          try
+          {
+            var rs = []; 
+            var r = new RegExp($("#regularexpressionresult").val(),"gm");
+            var s = $("#inputbigtext").val(); 
+            var m; 
+            var i = -1
+            while(m = r.exec(s))
+            {
+              if(i == m.index)
+                break;
+              i = m.index
+              rs.push((m.length>1) ? m[1] : m[0]);
+            }
+
+            $("#inputbigresults").val(rs.join("\n"))
+
+          }catch(e)
+          {
+            $("#inputbigresults").val(e)
+            return
+          }
+          if(a.length > 0)
+          {
+            $("#inputbigresults").val(a.join("\n"));
+          }
+          else
+          {
+            $("#inputbigresults").val(tr("No matches found"));
+          }
+      },
+      
+      revertoriginaltext: function(event)
+      {
+          event.preventDefault()
+          var id = $(event.target).closest("a").attr("data-regexp-id")
+          $(".e[data-regexp-id=" + id + "]").show()
+          $("a[data-regexp-id=" + id + "]").closest(".reg").remove()
+
+          _LocalModel.set({constr: _.reduce(_LocalModel.get("constr"),function(a, v){if(v["id"] != id)a.push(v); return a; },[]) })
+          
+      },
+
+      updateresultselect: function()
+      {
+        var stops = []
+
+        if(_GobalModel.get("state") == "regexpconstruct")
+        {
+          var start = _GobalModel.get("selectionresultstart")
+          var end = _GobalModel.get("selectionresultend")
+          if(start > end)
+          {
+            var temp = start
+            start = end
+            end = temp
+          }
+          stops.push(start)
+          stops.push(end + 1)
+          _.each(_LocalModel.get("constr"), function(c){stops.push(c["index1"]);stops.push(c["index2"] + 1)});
+        }
+
+        var selectionresultstart = _LocalModel.get("selectionresultstart")
+        var selectionresultend = _LocalModel.get("selectionresultend")
+        var overindex = _LocalModel.get("overindex")
+
+        $( ".e").removeClass("selected")
+        $( ".e").removeClass("selectedover")
+
+        if(selectionresultstart >= 0 && selectionresultend >= 0)
+        {
+          if(selectionresultend < selectionresultstart)
+          {
+            var temp = selectionresultend
+            selectionresultend = selectionresultstart
+            selectionresultstart = temp
+          }
+                    
+          $( ".e").slice(selectionresultstart, selectionresultend + 1).addClass("selected")
+          $("#toregexpconstruct").removeClass("disabled")
+        }else
+        {
+          $("#toregexpconstruct").addClass("disabled")
+        }
+
+        if(selectionresultstart >= 0 && selectionresultend == -1 && overindex >= 0)
+        {
+          var inverse = false
+          if(overindex < selectionresultstart)
+          {
+            var inverse = true
+            var temp = overindex
+            overindex = selectionresultstart
+            selectionresultstart = temp
+          }
+
+          if(!inverse)
+          {
+            for(selectionresultend = selectionresultstart;selectionresultend<=overindex;selectionresultend++)
+            {
+              if(stops.indexOf(selectionresultend) >= 0 && selectionresultstart!=selectionresultend)
+              {
+                break;
+              }
+            }
+          }else
+          {
+            var start = selectionresultstart
+            selectionresultend = overindex + 1
+            for(selectionresultstart = selectionresultend;selectionresultstart>start;selectionresultstart--)
+            {
+              if(stops.indexOf(selectionresultstart) >= 0 && selectionresultstart!=selectionresultend)
+              {
+                break;
+              }
+            }
+          }
+
+          $( ".e").slice(selectionresultstart, selectionresultend).addClass("selected") 
+        }
+
+        if(overindex >= 0)
+        {
+          $($(".e")[overindex]).addClass("selectedover")
+        }
+
+        if(_GobalModel.get("state") == "regexpconstruct")
+        {
+          if(IsRegexpReady())
+          {
+            $("#toregexptest").removeClass("disabled")
+          }else
+          {
+            $("#toregexptest").addClass("disabled")
+          }
+
+        }
+      },
+
+      mouseouttable: function(event)
+      {
+        _LocalModel.set("overindex", -1)
+      },
+
+      tableclick: function(event)
+      {
+        var selectionresultstart = _LocalModel.get("selectionresultstart")
+        var selectionresultend = _LocalModel.get("selectionresultend")
+
+        if(selectionresultend == -1 && selectionresultstart == -1 || selectionresultend != -1 && selectionresultstart != -1)
+        {
+          var index = $( ".e" ).index( event.target )
+          _LocalModel.set("selectionresultstart",index)
+          _LocalModel.set("selectionresultend",-1)
+        }else if(selectionresultend == -1 && selectionresultstart >= 0)
+        {
+          var index = $( ".e" ).index( event.target )
+
+          var stops = []
+          var isconstruct = false
+
+          if(_GobalModel.get("state") == "regexpconstruct")
+          {
+            isconstruct = true
+
+            var start = _GobalModel.get("selectionresultstart")
+            var end = _GobalModel.get("selectionresultend")
+            if(start > end)
+            {
+              var temp = start
+              start = end
+              end = temp
+            }
+            stops.push(start)
+            stops.push(end + 1)
+            _.each(_LocalModel.get("constr"), function(c){stops.push(c["index1"]);stops.push(c["index2"] + 1)});
+          }
+
+          var overindex = index
+
+          var inverse = false
+          if(overindex < selectionresultstart)
+          {
+            var inverse = true
+            var temp = overindex
+            overindex = selectionresultstart
+            selectionresultstart = temp
+          }
+
+          if(!inverse)
+          {
+            for(selectionresultend = selectionresultstart;selectionresultend<=overindex;selectionresultend++)
+            {
+              if(stops.indexOf(selectionresultend) >= 0 && selectionresultstart!=selectionresultend)
+              {
+                break;
+              }
+            }
+            _LocalModel.set("selectionresultend",selectionresultend - 1)
+            /*console.log("!inverse")
+            console.log(_LocalModel.get("selectionresultstart"))
+            console.log(_LocalModel.get("selectionresultend"))*/
+
+
+          }else
+          {
+
+            var start = selectionresultstart
+            selectionresultend = overindex + 1
+            for(selectionresultstart = selectionresultend;selectionresultstart>start;selectionresultstart--)
+            {
+              if(stops.indexOf(selectionresultstart) >= 0 && selectionresultstart!=selectionresultend)
+              {
+                break;
+              }
+            }
+            _LocalModel.set("selectionresultend",selectionresultstart)
+            /*console.log("inverse")
+            console.log(_LocalModel.get("selectionresultstart"))
+            console.log(_LocalModel.get("selectionresultend"))*/
+
+          }
+
+          if(isconstruct)
+          {
+            $('#SelectRegexpModal input[type=text]').val("")
+            $('#SelectRegexpModal input[type=number]').val("10")
+            $("#nongready").prop('checked', false);
+            $('#SelectRegexpModal').modal('show')
+
+            var start = _LocalModel.get("selectionresultstart")
+            var end = _LocalModel.get("selectionresultend")
+
+            if(end < start)
+            {
+              var temp = end
+              end = start
+              start = temp
+            }
+            var val = _GobalModel.get("inputtext").slice(start, end + 1);
+            $("#exacttextid").val(val)
+            $(".regexpoption").first().val(val)
+            $("#additionregexpoption").html("")
+            $("input[value=exact]").click()
+            $("input[value=onetime]").click()
+            
+          }
+
+        }
+      },
+
+      mouseovertable: function(event)
+      {
+        var index = $( ".e" ).index( event.target )
+        if(index != _LocalModel.get("overindex"))
+          _LocalModel.set("overindex", index)
+
+      },
+
+      saveinputtext: function(event)
+      {
+          event.preventDefault();
+          _GobalModel.set({ inputtext: $("#regexparea").val() });
+          _LocalModel.set("selectionresultstart",-1)
+          _LocalModel.set("selectionresultend",-1)
+          _GobalModel.set("selectionresultstart",-1)
+          _GobalModel.set("selectionresultend",-1)
+          _Router.navigate("!/resultselect", true);
+
+
+      },
+
+      saveselection: function(event)
+      {
+        _GobalModel.set({ selectionresultstart: _LocalModel.get("selectionresultstart") });
+        _GobalModel.set({ selectionresultend: _LocalModel.get("selectionresultend") });
+      },
+
+      validateregexparea: function(event)
+      {
+        if($("#regexparea").length > 0)
+        {
+          if($("#regexparea").val().length > 0)
+          {
+            $("#regexpareanext").removeClass("disabled")
+          }else
+          {
+            $("#regexpareanext").addClass("disabled")
+          }
+        }
+      },
+
+      restoreconstr: function(){
+        _.each(_LocalModel.get("constr"), function(con)
+        {
+          var start = con["index1"];
+          var end = con["index2"];
+
+          if(start > end)
+          {
+            var temp = end
+            end = start
+            start = temp
+          }
+
+          var id = con["id"]
+          var regexp = con["regexp"]
+          $( ".e").slice(start, end + 1).hide().attr("data-regexp-id",id)
+          $($(".e")[start]).before("<div class='reg'><a href='#' class='revert-original-text' data-regexp-id='" + id + "'><span style='font-size:80%;font-weight: bold;'>&#x21bb;</span></a>" + _.escape(regexp) + "</div>");
+
+        })
+        if(IsRegexpReady())
+        {
+          $("#toregexptest").removeClass("disabled")
+        }else
+        {
+          $("#toregexptest").addClass("disabled")
+        }
+      },
+
+      initialize: function(){
+        this.templates =
+        {
+          "main" : _.template($('#main').html()),
+          "input" : _.template($('#input').html()),
+          "resultselect" : _.template($('#resultselect').html()),
+          "regexpconstruct" : _.template($('#regexpconstruct').html()),
+          "regexptest" : _.template($('#regexptest').html())
+          
+        }
+        this.model.bind('change', this.render, this);
+        _LocalModel.bind('change', this.updateresultselect, this);
+        this.model.bind('change', this.validateregexparea, this);
+
+        this.render();
+      },
+
+      render: function(){
+        /* Validate */ 
+        var state = this.model.get("state")
+
+        if(state == "regexptest" && (_GobalModel.get("constr").length == 0))
+        {
+          state = "regexpconstruct"
+        }
+        if(state == "regexpconstruct" && (_GobalModel.get("inputtext").length == 0 || _GobalModel.get("selectionresultstart") == -1 || _GobalModel.get("selectionresultstart") == -1))
+        {
+          state = "resultselect"
+        }
+        if(state == "resultselect" && _GobalModel.get("inputtext").length == 0)
+        {
+          state = "input"
+        }
+
+        $("#container").html(this.templates[state]({model:this.model.toJSON()}))
+
+        if(state == "resultselect")
+        {
+          this.updateresultselect()
+        }
+
+        if(state == "regexpconstruct")
+        {
+          this.restoreconstr()
+        }
+
+
+        if(state == "regexptest")
+          $("#regularexpressionresult").val(GetResultRegexp())
+
+        tr()
+
+        $('[data-toggle="tooltip"]').tooltip()
+
+        new Clipboard('.btn');
+
+        $("body").show()
+      },
+
+    });
+
+    window._K = navigator.language.split("-")[0]
+
+
+    var Router = Backbone.Router.extend({
+        routes: {
+            "": "main",
+            "!/input": "input",
+            "!/resultselect": "resultselect",
+            "!/regexpconstruct": "regexpconstruct",
+            "!/regexptest": "regexptest",
+        },
+
+        main: function () {
+          _GobalModel.set({ constr: [] });
+          _GobalModel.set({ state: "main" });
+        },
+        input: function () {
+          _GobalModel.set({ constr: [] });
+          _GobalModel.set({ state: "input" });
+        },
+        resultselect: function () {
+          _LocalModel.set({ selectionresultstart: _GobalModel.get("selectionresultstart") });
+          _LocalModel.set({ selectionresultend: _GobalModel.get("selectionresultend") });
+          _GobalModel.set({ constr: [] });
+
+          _GobalModel.set({ state: "resultselect" });
+        },
+        regexpconstruct: function () {
+          _LocalModel.set({ selectionresultstart: -1 });
+          _LocalModel.set({ selectionresultend: -1 });
+          _LocalModel.set({ constr: _GobalModel.get("constr") });
+          
+          _GobalModel.set({ state: "regexpconstruct" });
+        },
+        regexptest: function () {
+          _GobalModel.set({ constr: _LocalModel.get("constr") });
+          _GobalModel.set({ state: "regexptest" });
+        }
+    });
+
+    var _Router = new Router();
+
+    var _GobalModel = new GobalModel();
+
+    var _LocalModel = new LocalModel();
+
+    var _MainView = new MainView({model: _GobalModel});
+
+    Backbone.history.start();
+
+    $( document ).ready(function() {
+        $("input[name=type]").change(function(){
+              $(".radiodata").hide()
+              $('input[name=type]:checked').parents(".radio").find(".radiodata").show()
+        });
+
+        $("input[name=number]").change(function(){
+              $(".radiodatanumber").hide()
+              $('input[name=number]:checked').parents(".radio").find(".radiodatanumber").show()
+
+              if($('input[name=number]:checked').val() == "onetime")
+                $("#nongreadylabel").hide();
+              else
+                $("#nongreadylabel").show();
+        });
+
+        $("#regexpoptionmore").click(function(event){
+          $("#additionregexpoption").append( '<input type="text" class="form-control regexpoption"/>' )
+          event.preventDefault()
+        })
+
+        $("#accept-regexp-constructor").click(function(){
+          $('#SelectRegexpModal').modal('hide')
+          var start = _LocalModel.get("selectionresultstart");
+          var end = _LocalModel.get("selectionresultend");
+
+          if(start > end)
+          {
+            var temp = end
+            end = start
+            start = temp
+          }
+
+          var id = MakeId();
+          var regexp = CaptureRegexp()     
+          $( ".e").slice(start, end + 1).hide().attr("data-regexp-id",id)
+          $($(".e")[start]).before("<div class='reg'><a href='#' class='revert-original-text' data-regexp-id='" + id + "'><span style='font-size:80%;font-weight: bold;'>&#x21bb;</span></a>" + _.escape(regexp) + "</div>");
+          
+
+           var constr = _LocalModel.get("constr")
+           constr.push({id:id,index1:start,index2:end,regexp:regexp});
+           _LocalModel.set({constr:constr})
+          _LocalModel.set({ selectionresultstart: -1 });
+          _LocalModel.set({ selectionresultend: -1 });
+        })
+        $("#cancel-regexp-constructor").click(function(){
+          $('#SelectRegexpModal').modal('hide')
+          _LocalModel.set({ selectionresultstart: -1 });
+          _LocalModel.set({ selectionresultend: -1 });
+        })
+    });
+
+    function MakeId()
+    {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 5; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
+
+    function IsRegexpReady()
+    {
+      return $(".e:visible").length == 0
+    }
+
+    function GetResultRegexp()
+    {
+      var constr = _LocalModel.get("constr").slice()
+      
+      var start = _GobalModel.get("selectionresultstart")
+      var end = _GobalModel.get("selectionresultend")
+      if(start > end)
+      {
+        var temp = start
+        start = end
+        end = temp
+      }
+
+      constr.push({index1:start,regexp:"("})
+      constr.push({index1:end,regexp:")"})
+
+
+      constr = constr.sort(function (a, b) {
+        if(a["index1"]>b["index1"]) return 1;
+        if(a["index1"]<b["index1"]) return -1; 
+        if(a["regexp"] == "(") return -1; 
+        if(b["regexp"] == "(") return 1;
+        if(a["regexp"] == ")") return 1; 
+        if(b["regexp"] == ")") return -1;
+        return 0;
+        })
+      return constr.map(function(a){return a["regexp"]}).join("")
+    }
+
+
+    function CaptureRegexp()
+    {
+      var dat = ""
+      var quant = ""
+
+      switch($('input[name=type]:checked').val())
+      {
+        case "exact": dat = re1($("#exacttextid").val()); break;
+        case "any": dat = "."; break;
+        case "ignore": return ""; break;
+        case "digit": dat = "\\d"; break;
+        case "space": dat = "\\s"; break;
+        case "letters": dat = "\\w"; break;
+        case "oneof": dat = "(?:" + _.reduce($(".regexpoption"),function(a, v){var val = $(v).val(); if(val.length != 0){a.push(re1(val))}; return a; },[]).join("|") + ")"; break;
+        case "set": dat = "[" + re2($("#regexpset").val()) + "]"; break;
+
+        case "negativeset": dat = "[^" + re2($("#regexpsetnegative").val()) + "]"; break;
+        case "custom": dat = $("#customregexp").val(); break;
+      }
+
+      switch($('input[name=number]:checked').val())
+      {
+        case "onetime": quant=""; break;
+        case "oneorzero": quant="?"; break;
+        case "zeroormore": quant="*"; break;
+        case "oneormore": quant="+"; break;
+        case "rangetimes": quant="{" + $("#frommatches").val() + "," + $("#tomatches").val() + "}"; break;
+        
+      }
+
+      if($("#nongready").prop('checked') && quant.length > 0)
+      {
+        quant += "?"
+      }
+
+
+      return "" + dat + "" + quant
+
+    }
+
+    function re1(data)
+    {
+      return data.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    }
+
+    function re2(data)
+    {
+      return data.replace(/[[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    }
+
+    function je(data)
+    {
+      return data
+      .replace(new RegExp("\\\\","g"),"\\u005c")
+      .replace(new RegExp("<","g"),"\\u003c")
+      .replace(new RegExp(">","g"),"\\u003e")
+      .replace(new RegExp("\"","g"),"\\u0022")
+      .replace(new RegExp("'","g"),"\\u0027")
+      .replace(new RegExp("&","g"),"\\u0026")
+      .replace(new RegExp("\\n","g"),"\\n")
+      .replace(new RegExp("\\r","g"),"\\r")
+    }
+
+    function utf8_to_b64( str ) {
+        return window.btoa(unescape(encodeURIComponent( str )));
+    }
+
+    function b64_to_utf8( str ) {
+        return decodeURIComponent(escape(window.atob( str )));
+    }
+
+    
+
+  </script>
+
+</body>
+</html>
