@@ -4,6 +4,7 @@ _L =
 	"I want to build regular expression!" :{"ru": "Хочу создать регулярное выражение!"},
 	"Input result together with side text." :{"ru": "Введите результат и обрамляющий его текст."},
 	"Next" :{"ru": "Дальше"},
+	"See video tutorial on" :{"ru": "Смотрите видео руководство на"},
 	"Previous" :{"ru": "Назад"},
 	"Now select result." :{"ru": "Теперь выделите результат."},
 	"Mark parts of text and convert them to regular expression." :{"ru": "Помечайте части текста и превращайте их в регулярное выражение."},
