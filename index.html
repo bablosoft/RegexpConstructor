@@ -856,7 +856,7 @@
       switch($('input[name=type]:checked').val())
       {
         case "exact": dat = re1($("#exacttextid").val()); break;
-        case "any": dat = "."; break;
+        case "any": dat = "[\\s\\S]"; break;
         case "ignore": return ""; break;
         case "digit": dat = "\\d"; break;
         case "space": dat = "\\s"; break;
